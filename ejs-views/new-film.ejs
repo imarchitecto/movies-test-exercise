@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs') %>
+<body>
+  <%- include('./partials/nav.ejs') %>
+  <form id="post-form" method="post" action="/new-film">
+    <input type="text" name=title class="load" placeholder="Название фильма">
+                        <input type="text" name=directors class="load" placeholder="Режиссер">
+                        <input type="text" name=geners class="load" placeholder="Жанр">
+                        <input type="text" name=countries class="load" placeholder="Страна">
+                        <input type="text" name=year class="load" placeholder="Год">
+                        <input type="text" name=description class="load" placeholder="Краткое описание фильма">
+                        <div class="btn">
+                            <div class="btn1">
+                                <input id="radio1" type="radio" name="type" value="movie">
+                                <label for="radio1">Фильм</label>
+                            </div>
+                            <div class="btn2">
+                                <input id="radio2" type="radio" name="type" value="tvSeries">
+                                <label for="radio2">Сериал</label>
+                            </div>
+                        </div>
+    <div class="form-button">
+      <input type="submit" value="Добавить">
+    </div>
+  </form>
+</body>
+</html>
