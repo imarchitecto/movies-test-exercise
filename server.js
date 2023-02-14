@@ -1,9 +1,11 @@
 const express = require('express');
-const path = require('path');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const Film = require('./models/film-mod');
+const createPath = require('./helpers/create-path');
+const newFilmRoutes = require('./routes/new-film-routes');
+const listFilmsRoutes = require('./routes/list-films-routes');
 
 const app = express();
 
@@ -18,7 +20,6 @@ mongoose
   .then((res) => console.log('Connected to DB'))
   .catch((error) => console.log(error));
 
-const createPath = (page) => path.resolve(__dirname, 'ejs-views', `${page}.ejs`);
 
 app.listen(PORT, (error) => {
   error ? console.log(error) : console.log(`listening port ${PORT}`);
@@ -43,58 +44,8 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/list-films', (req, res) => {
-  const title = 'Поиск фильма';
-  Film
-    .find({title: `${req.query.text}`}, {title: 1})
-    .then(films => res.render(createPath('list-films'), {  films, title })) 
-    .catch((error) => {
-      console.log(error);
-      res.render(createPath('error'), { title: 'Error' });
-    });
-}); 
-
-
-app.post('/new-film', (req, res) => {
-  const { title, directors, geners, countries, year, description, type } = req.body;
-  directorsArray = directors.split(', ');
-  genersArray = geners.split(', ');
-  countriesArray = countries.split(', ');
-  const film = new Film({ title, directors, geners, countries, year, description, type });
-
-  for(i = 0; i < directorsArray.length; i++) {
-    let element = directorsArray[i];
-    film.directors.push(element);
-  }
-  film.directors.shift();
-
-  for(i = 0; i < genersArray.length; i++) {
-    let element = genersArray[i];
-    film.geners.push(element);
-  }
-  film.geners.shift();
-  
-  for(i = 0; i < countriesArray.length; i++) {
-    let element = countriesArray[i];
-    film.countries.push(element);
-  }
-  film.countries.shift();
-
-  console.log(film);
-
-  film
-    .save()
-    .then((result) => res.redirect('/list-films'))
-    .catch((error) => {
-      console.log(error);
-      res.render(createPath('error'), { title: 'Error' });
-    });
-});
-
-app.get('/new-film', (req, res) => {
-  const title = 'Добавить фильм';
-  res.render(createPath('new-film'), { title });
-}); 
+app.use(newFilmRoutes);
+app.use(listFilmsRoutes);
 
 app.use((req, res) => {
   const title = 'Error Page';
