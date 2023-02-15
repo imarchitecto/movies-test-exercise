@@ -3,9 +3,12 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const Film = require('./models/film-mod');
-const createPath = require('./helpers/create-path');
 const newFilmRoutes = require('./routes/new-film-routes');
 const listFilmsRoutes = require('./routes/list-films-routes');
+const apiNewFilmRoutes = require('./routes/api-new-film-routes');
+const apiListFilmsRoutes = require('./routes/api-list-films-routes');
+const createPath = require('./helpers/create-path');
+
 
 const app = express();
 
@@ -46,6 +49,8 @@ app.get('/', (req, res) => {
 
 app.use(newFilmRoutes);
 app.use(listFilmsRoutes);
+app.use(apiListFilmsRoutes);
+app.use(apiNewFilmRoutes);
 
 app.use((req, res) => {
   const title = 'Error Page';
