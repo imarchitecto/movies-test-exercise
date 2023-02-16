@@ -1,6 +1,9 @@
 const Film = require('../models/film-mod');
+const { newFilmValidation } = require('../validations/new-film-validation');
 
 const addFilm = (req, res) => {
+    const { error } = newFilmValidation(req.body);
+    if(error) return next(error)
     const { title, directors, geners, countries, year, description, type } = req.body;
     directorsArray = directors.split(', ');
     genersArray = geners.split(', ');

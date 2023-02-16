@@ -1,7 +1,13 @@
 const Film = require('../models/film-mod');
 const createPath = require('../helpers/create-path');
+const { newFilmValidation } = require('../validations/new-film-validation');
 
 const addFilm = (req, res) => {
+    const { error } = newFilmValidation(req.body);
+    if(error) {
+      console.log(error)
+      return res.status(400).json({message: 'error'})
+    }
     const { title, directors, geners, countries, year, description, type } = req.body;
     directorsArray = directors.split(', ');
     genersArray = geners.split(', ');
